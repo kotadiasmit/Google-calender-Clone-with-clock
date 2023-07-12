@@ -1,16 +1,14 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { TimePicker } from "material-ui";
 import { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import { TimePicker } from "material-ui";
+import { Button, Modal } from "react-bootstrap";
 import { addMyEvent, deleteMyEvent, updateMyEvent } from "../Store/reducer";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./AddUpdateEvent.css";
 
 const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
   const { title, desc, id, start, end } = addAndUpdateEvent;
-
   const dispatch = useDispatch();
-
   const [show, setShow] = useState(true);
   const [eventTitle, setEventTitle] = useState(title);
   const [description, setDescription] = useState(desc);
@@ -34,13 +32,16 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
     setEventTitle(value);
     setErrorMsg("");
   };
+
   const descriptionChanged = (event) => {
     const { value } = event.target;
     setDescription(value);
   };
+
   const onStartTimeChange = (_, date) => {
     setStartTime(date);
   };
+
   const onEndTimeChange = (_, date) => {
     setEndTime(date);
   };
@@ -58,8 +59,6 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
         start: startTime,
         end: endTime,
       };
-      console.log(endTime);
-      console.log(startTime);
       if (endTime?.getTime() - startTime?.getTime() <= 0) {
         alert("Please set valid End Time");
         return;
@@ -86,7 +85,6 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
         <Modal.Header closeButton>
           <Modal.Title>{isAddEvent ? "Add Event" : "Update Event"}</Modal.Title>
         </Modal.Header>
-
         <Modal.Body>
           <form className="form-container" onSubmit={modalCloseOnAdd}>
             <label className="label" htmlFor="eventTitle">
@@ -123,7 +121,6 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
                 id="startTimePicker"
                 onChange={onStartTimeChange}
               />
-
               <TimePicker
                 className="time-picker"
                 format="24hr"
@@ -142,7 +139,6 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
             )}
           </form>
         </Modal.Body>
-
         <Modal.Footer>
           <Button variant="secondary" onClick={modalClose}>
             Close Event

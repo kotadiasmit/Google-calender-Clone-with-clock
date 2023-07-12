@@ -36,6 +36,7 @@ const eventReducer = createSlice({
     },
   },
 });
+
 export const { addMyEvent, updateMyEvent, deleteMyEvent } =
   eventReducer.actions;
 export default eventReducer.reducer;
