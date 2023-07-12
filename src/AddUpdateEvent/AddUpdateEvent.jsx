@@ -38,10 +38,10 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
     const { value } = event.target;
     setDescription(value);
   };
-  const onStartTimeChange = (date) => {
+  const onStartTimeChange = (_, date) => {
     setStartTime(date);
   };
-  const onEndTimeChange = (date) => {
+  const onEndTimeChange = (_, date) => {
     setEndTime(date);
   };
 
@@ -58,7 +58,9 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
         start: startTime,
         end: endTime,
       };
-      if (endTime.getTime() - startTime.getTime() <= 0) {
+      console.log(endTime);
+      console.log(startTime);
+      if (endTime?.getTime() - startTime?.getTime() <= 0) {
         alert("Please set valid End Time");
         return;
       }
