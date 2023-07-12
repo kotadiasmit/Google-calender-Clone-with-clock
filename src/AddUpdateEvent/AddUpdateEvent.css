@@ -45,9 +45,22 @@ p {
   border-radius: 4px;
   background-color: #ececec;
   margin-bottom: 5px;
+  padding-left: 4px;
 }
 .time-label {
   font-size: 18px;
   align-self: flex-start;
   margin-bottom: 5px;
+}
+.label2 {
+  margin-left: 10px;
+}
+.time-container {
+  display: flex;
+  align-self: flex-start;
+  margin-left: 5%;
+  width: 300px;
+}
+.time-picker {
+  width: 100px !important;
 }

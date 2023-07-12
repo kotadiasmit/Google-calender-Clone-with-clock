@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import moment from "moment";
+import { TimePicker } from "material-ui";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useDispatch } from "react-redux";
@@ -9,15 +9,13 @@ import "./AddUpdateEvent.css";
 const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
   const { title, desc, id, start, end } = addAndUpdateEvent;
 
-  const formattedEndTime = moment(end).format("HH:mm");
-  const formattedStartTime = moment(start).format("HH:mm");
   const dispatch = useDispatch();
 
   const [show, setShow] = useState(true);
   const [eventTitle, setEventTitle] = useState(title);
   const [description, setDescription] = useState(desc);
-  const [startTime, setStartTime] = useState(formattedStartTime);
-  const [endTime, setEndTime] = useState(formattedEndTime);
+  const [startTime, setStartTime] = useState(start);
+  const [endTime, setEndTime] = useState(end);
   const [errorMsg, setErrorMsg] = useState("");
 
   const modalClose = () => {
@@ -40,13 +38,11 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
     const { value } = event.target;
     setDescription(value);
   };
-  const onStartTimeChange = (event) => {
-    const { value } = event.target;
-    setStartTime(value);
+  const onStartTimeChange = (date) => {
+    setStartTime(date);
   };
-  const onEndTimeChange = (event) => {
-    const { value } = event.target;
-    setEndTime(value);
+  const onEndTimeChange = (date) => {
+    setEndTime(date);
   };
 
   const modalCloseOnAdd = (event) => {
@@ -54,24 +50,15 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
     const trimmedEventTitle = eventTitle.trim();
     const trimmedDescription = description.trim();
 
-    const endYear = end.getFullYear();
-    let endMonth = end.getMonth();
-    let endDate = end.getDate();
-
     if (trimmedEventTitle) {
       let AddOrUpdateEventDetails = {
         id: id,
         title: trimmedEventTitle,
         desc: trimmedDescription,
-        start: new Date(`${moment(start).format("ll")} ${startTime}`),
-        end: new Date(`${endYear}/${endMonth + 1}/${endDate} ${endTime}`),
+        start: startTime,
+        end: endTime,
       };
-
-      if (
-        AddOrUpdateEventDetails.start.getTime() -
-          AddOrUpdateEventDetails.end.getTime() ===
-        0
-      ) {
+      if (endTime.getTime() - startTime.getTime() <= 0) {
         alert("Please set valid End Time");
         return;
       }
@@ -118,34 +105,26 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
             </label>
             <textarea
               className="textarea"
-              // eslint-disable-next-line react/no-unknown-property
-              row="4"
               maxLength="200"
               placeholder="Description"
               value={description}
               onChange={descriptionChanged}
               id="textarea"
             ></textarea>
-            <div>
-              <label className="time-label" htmlFor="StartTime">
-                Start:
-              </label>
-              <input
-                type="time"
-                id="startTime"
-                className="time"
-                value={startTime}
+            <div className="time-container">
+              <TimePicker
+                className="time-picker"
+                format="24hr"
+                floatingLabelText="Start Time"
+                minutesStep={5}
+                value={start}
                 onChange={onStartTimeChange}
               />
-
-              <label className="time-label" htmlFor="endTime">
-                End:
-              </label>
-              <input
-                type="time"
-                id="endTime"
-                className="time"
-                value={endTime}
+              <TimePicker
+                format="24hr"
+                floatingLabelText="End Time"
+                minutesStep={5}
+                value={end}
                 onChange={onEndTimeChange}
               />
             </div>
