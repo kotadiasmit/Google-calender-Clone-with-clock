@@ -8,12 +8,15 @@ import "./AddUpdateEvent.css";
 
 const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
   const { title, desc, id, start, end } = addAndUpdateEvent;
+  const initialState = {
+    eventTitle: title || "",
+    description: desc || "",
+    startTime: start || null,
+    endTime: end || null,
+  };
   const dispatch = useDispatch();
   const [show, setShow] = useState(true);
-  const [eventTitle, setEventTitle] = useState(title);
-  const [description, setDescription] = useState(desc);
-  const [startTime, setStartTime] = useState(start);
-  const [endTime, setEndTime] = useState(end);
+  const [eventData, setEventData] = useState(initialState);
   const [errorMsg, setErrorMsg] = useState("");
 
   const modalClose = () => {
@@ -27,27 +30,31 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
     }
   };
 
-  const titleInputChanged = (event) => {
-    const { value } = event.target;
-    setEventTitle(value);
-    setErrorMsg("");
-  };
-
-  const descriptionChanged = (event) => {
-    const { value } = event.target;
-    setDescription(value);
+  const onInputChange = (event) => {
+    const { id, value } = event.target;
+    setEventData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
   };
 
   const onStartTimeChange = (_, date) => {
-    setStartTime(date);
+    setEventData((prevData) => ({
+      ...prevData,
+      startTime: date,
+    }));
   };
 
   const onEndTimeChange = (_, date) => {
-    setEndTime(date);
+    setEventData((prevData) => ({
+      ...prevData,
+      endTime: date,
+    }));
   };
 
   const modalCloseOnAdd = (event) => {
     event.preventDefault();
+    const { eventTitle, startTime, endTime, description } = eventData;
     const trimmedEventTitle = eventTitle.trim();
     const trimmedDescription = description.trim();
 
@@ -96,20 +103,20 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
               id="eventTitle"
               placeholder="Event Title"
               maxLength="40"
-              value={eventTitle}
-              onChange={titleInputChanged}
+              value={eventData.eventTitle}
+              onChange={onInputChange}
               autoFocus
             />
-            <label className="label" htmlFor="textarea">
+            <label className="label" htmlFor="description">
               Description
             </label>
             <textarea
               className="textarea"
               maxLength="200"
               placeholder="Description"
-              value={description}
-              onChange={descriptionChanged}
-              id="textarea"
+              value={eventData.description}
+              onChange={onInputChange}
+              id="description"
             ></textarea>
             <div className="time-container">
               <TimePicker
