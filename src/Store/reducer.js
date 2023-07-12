@@ -5,16 +5,9 @@ const myEventsList = [
     id: 0,
     title: "Day Event",
     allDay: true,
-    start: new Date(2023, 6, 11, 5, 0, 0),
-    end: new Date(2023, 6, 11, 9, 0, 0),
+    start: new Date(),
+    end: new Date(),
     desc: "",
-  },
-  {
-    id: 1,
-    title: "My Event",
-    start: new Date(2023, 6, 7),
-    end: new Date(2023, 6, 7),
-    desc: "My Desc.",
   },
 ];
 

@@ -120,13 +120,17 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
                 floatingLabelText="Start Time"
                 minutesStep={5}
                 value={start}
+                id="startTimePicker"
                 onChange={onStartTimeChange}
               />
+
               <TimePicker
+                className="time-picker"
                 format="24hr"
                 floatingLabelText="End Time"
                 minutesStep={5}
                 value={end}
+                id="endTimePicker"
                 onChange={onEndTimeChange}
               />
             </div>

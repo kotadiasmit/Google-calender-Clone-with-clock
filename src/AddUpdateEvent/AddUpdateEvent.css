@@ -39,22 +39,6 @@ p {
 .update-add-location-btn {
   display: none;
 }
-.time {
-  margin-left: 5px;
-  margin-right: 5px;
-  border-radius: 4px;
-  background-color: #ececec;
-  margin-bottom: 5px;
-  padding-left: 4px;
-}
-.time-label {
-  font-size: 18px;
-  align-self: flex-start;
-  margin-bottom: 5px;
-}
-.label2 {
-  margin-left: 10px;
-}
 .time-container {
   display: flex;
   align-self: flex-start;
