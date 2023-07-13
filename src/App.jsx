@@ -15,13 +15,11 @@ const App = () => {
   const eventsData = useSelector((state) => state.eventStore.eventList);
 
   const onAddEvent = ({ start, end }) => {
-    const myEndDate = moment(end).subtract(1, "second")._d;
-
     setIsAddEvent(true);
     const createEvent = {
       id: eventsData.length ? eventsData[eventsData.length - 1].id + 1 : 0,
       start: start,
-      end: myEndDate,
+      end: end,
       title: "",
       desc: "",
     };

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { TimePicker } from "material-ui";
 import { Button, Modal } from "react-bootstrap";
+import { DatePicker, TimePicker } from "material-ui";
+import moment from "moment/moment";
 import { addMyEvent, deleteMyEvent, updateMyEvent } from "../Store/reducer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AddUpdateEvent.css";
@@ -11,6 +12,8 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
   const initialState = {
     eventTitle: title || "",
     description: desc || "",
+    startDate: start || null,
+    endDate: end || null,
     startTime: start || null,
     endTime: end || null,
   };
@@ -29,6 +32,9 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
       setErrorMsg("please enter valid title");
     }
   };
+
+  const dateTimeSetup = (date, time) =>
+    new Date(`${moment(date).format("LL")} ${moment(time).format("LT")}`);
 
   const onInputChange = (event) => {
     const { id, value } = event.target;
@@ -51,25 +57,44 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
       endTime: date,
     }));
   };
+  const onStartDateChange = (_, date) => {
+    setEventData((prevData) => ({
+      ...prevData,
+      startDate: date,
+    }));
+  };
+
+  const onEndDateChange = (_, date) => {
+    setEventData((prevData) => ({
+      ...prevData,
+      endDate: date,
+    }));
+  };
 
   const modalCloseOnAdd = (event) => {
     event.preventDefault();
-    const { eventTitle, startTime, endTime, description } = eventData;
+    const { eventTitle, startDate, endDate, startTime, endTime, description } =
+      eventData;
+
     const trimmedEventTitle = eventTitle.trim();
     const trimmedDescription = description.trim();
+    if (
+      dateTimeSetup(endDate, endTime)?.getTime() -
+        dateTimeSetup(startDate, startTime)?.getTime() <=
+      0
+    ) {
+      alert("Please set Valid End Time");
+      return;
+    }
 
     if (trimmedEventTitle) {
       let AddOrUpdateEventDetails = {
         id: id,
         title: trimmedEventTitle,
         desc: trimmedDescription,
-        start: startTime,
-        end: endTime,
+        start: dateTimeSetup(startDate, startTime),
+        end: dateTimeSetup(endDate, endTime),
       };
-      if (endTime?.getTime() - startTime?.getTime() <= 0) {
-        alert("Please set valid End Time");
-        return;
-      }
       isAddEvent
         ? dispatch(addMyEvent(AddOrUpdateEventDetails))
         : dispatch(updateMyEvent(AddOrUpdateEventDetails));
@@ -118,13 +143,32 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
               onChange={onInputChange}
               id="description"
             ></textarea>
-            <div className="time-container">
+            <div className="date-time-container">
+              <DatePicker
+                className="date-picker"
+                floatingLabelText="Start Date"
+                label="startDate"
+                id="startDatePicker"
+                value={eventData.startDate}
+                onChange={onStartDateChange}
+              />
+              <DatePicker
+                className="date-picker"
+                floatingLabelText="End Date"
+                label="endDate"
+                id="endDatePicker"
+                value={eventData.endDate}
+                onChange={onEndDateChange}
+              />
+            </div>
+            <div className="date-time-container">
               <TimePicker
                 className="time-picker"
                 format="24hr"
                 floatingLabelText="Start Time"
                 minutesStep={5}
-                value={start}
+                value={eventData.startTime}
+                label="startTime"
                 id="startTimePicker"
                 onChange={onStartTimeChange}
               />
@@ -133,8 +177,10 @@ const AddUpdateEvent = ({ addAndUpdateEvent, closeModel, isAddEvent }) => {
                 format="24hr"
                 floatingLabelText="End Time"
                 minutesStep={5}
-                value={end}
+                value={eventData.endTime}
+                label="endTime"
                 id="endTimePicker"
+                disablePast
                 onChange={onEndTimeChange}
               />
             </div>

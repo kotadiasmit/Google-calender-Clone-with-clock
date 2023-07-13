@@ -7,6 +7,9 @@
   padding: 10px;
   font-family: serif;
 }
+label {
+  color: black !important;
+}
 .label {
   font-size: 18px;
   margin-left: 2px;
@@ -22,7 +25,7 @@
   border-radius: 3px;
   margin-top: 5px;
   margin-bottom: 15px;
-  background-color: #ececec;
+  background-color: #f4f2f2;
 }
 .textarea {
   height: 100px;
@@ -38,12 +41,17 @@ p {
 .update-add-location-btn {
   display: none;
 }
-.time-container {
+.date-time-container {
   display: flex;
   align-self: flex-start;
   margin-left: 5%;
   width: 300px;
 }
+.date-picker div {
+  width: 100px !important;
+  margin-right: 20px;
+}
 .time-picker {
+  margin-right: 20px;
   width: 100px !important;
 }
